@@ -19,7 +19,7 @@ public class Card implements Comparable<Card>{
 	 * Card constructor
 	 * @param suit
 	 * @param value
-	 * 
+	 * @param numericValue
 	 */
 	public Card(String suit, String value, int numericValue){
 		this.suit = suit;
@@ -58,9 +58,19 @@ public class Card implements Comparable<Card>{
 	public String toString(){
 		return value + " of " + suit;
 	}
-	
+	/**
+	 * setter for numericValue
+	 * 
+	 */
 	public void setValue(int newValue) {
 		this.numericValue = newValue;
+	}
+
+
+	@Override
+	public int compareTo(Card arg0) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

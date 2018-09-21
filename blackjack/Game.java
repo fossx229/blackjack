@@ -13,11 +13,23 @@ public class Game {
 	boolean blackJack;
 	boolean testing = false;
 
-
+	/**
+	 * Game constructor
+	 * 
+	 */
 	public Game() {
 		this.dealer = new Dealer();
 	}
 
+	/**
+	 * playBlackJack runs most the code, it asks a player to bet
+	 * dealer deals cards
+	 * checkBlackJack checks if either the deal or player has blackjack
+	 * Player will decide to hit or to stand
+	 * Dealer will decide to hit or to stand
+	 * resolveGame will see if the dealer or the player won/lose/tied
+	 * 
+	 */
 	public void playBlackJack() {
 		player.Bet();
 		dealer.dealCards(this.player);
@@ -27,6 +39,10 @@ public class Game {
 		resolveGame();
 	}
 
+	/**
+	 * gameSetUp makes the player and reads in stats from previous games
+	 * testing flag allows tests to not fail
+	 */
 	public void gameSetUp() {
 		boolean running = true;
 		while(running) {
@@ -34,19 +50,22 @@ public class Game {
 				System.out.println("Hello! What is your name?");
 				String name = scan.nextLine();;
 				this.player = new Player(10000, name);
+
 				if(this.player != null) {
 					running = false;
 				}
-				if(testing == false) {
-					this.player.setStats();
-					this.dealer.setStats();
-				}
+
+
 			} catch (Exception e) { 
 				System.out.println("You need to enter valid input. You probably want to enter a valid bet number or name or something went wrong reading in stats.");
 			}
+
 		}
 	}
 
+	/**
+	 * Checks if either player has 21 right away and updates wins, loses, and ties.
+	 */
 	public void checkBlackJack() {
 		this.player.getHand().checkForAce();
 		this.dealer.getHand().checkForAce();
@@ -76,6 +95,11 @@ public class Game {
 		}
 	}
 
+	/**
+	 * Checks if the player went over 21, updates an ace if to count as 11 if ace count is less than
+	 * one, updates ace count back to 1 if more than one ace exists, method returns if player choses to stand
+	 * updates wins, money, and loses too
+	 */
 	public void playerHitOrNot () {
 		if(checkBust()) {
 			if(this.player.getHand().getAceCount() < 1 && this.player.getHand().getCount() < 11) {
@@ -112,10 +136,14 @@ public class Game {
 			this.player.removeFromBank();
 			keepPlaying();
 		}
-		
+
 
 	}
 
+	/**
+	 * Checks if the dealer or player went over 21.
+	 * 
+	 */
 	public boolean checkBust() {
 		if(this.player.getHand().getCount()>21 ) {
 			return false;
@@ -126,9 +154,17 @@ public class Game {
 		}
 	}
 
+	/**
+	 * Checks if the dealer went over 21, updates an ace if to count as 11 if ace count is less than
+	 * one, updates ace count back to 1 if more than one ace exists, method returns if player choses to stand
+	 * updates wins, money, and loses too
+	 */
 	public void dealerHitOrNot() {
 		if(this.dealer.getHand().getAceCount() < 1 && this.dealer.getHand().getCount() < 12) {
 			this.dealer.getHand().checkForAce();
+		}
+		if(this.dealer.getHand().getAceCount() > 2 && this.dealer.getHand().getCount() > 22) {
+			this.dealer.getHand().resetAce();
 		}
 		if(checkBust()) {
 			if(this.dealer.getHand().getCount() <= 16 || this.dealer.getHand().getCount() < this.player.getHand().getCount()) {
@@ -152,6 +188,9 @@ public class Game {
 
 	}
 
+	/**
+	 * compares dealer and player hand value and updates wins, loses, ties, and money.
+	 */
 	public void resolveGame() {
 		if(this.player.getHand().getCount() == this.dealer.getHand().getCount()) {
 			this.player.Push();
@@ -182,13 +221,16 @@ public class Game {
 		}
 	}
 
+	/**
+	 * method for replaying the game
+	 */
 	public void keepPlaying() {
 		if(testing) return; 
 		else {
 			if(this.dealer.getDeck().getSize() < 26) {
 				this.dealer.remakeDeck();
 			}
-			System.out.println("Would you like to play again? (enter 'yes' to keep playing or 'no' to stop playing");
+			System.out.println("Would you like to play again or see your lifetime stats? (enter 'yes' to keep playing or 'no' to stop playing or 'stats' to see lifetime stats");
 			String answer = scan.nextLine();
 			if(answer.toLowerCase().compareTo("yes")==0) {
 				this.player.getHand().clear();
@@ -198,12 +240,22 @@ public class Game {
 				System.out.println("Thanks for playing!!");
 				writeData();
 				System.exit(0);
+
+			} else if(answer.toLowerCase().compareTo("stats")==0) {
+				writeData();
+				readDataIn();
+				printStats();
+				keepPlaying();
+
 			} else {
 				keepPlaying();
 			}
 		}
 	}
 
+	/**
+	 * writes stat data to a text file.
+	 */
 	public void writeData() {
 		try {
 			PrintWriter writer = new PrintWriter("blackjack.txt", "UTF-8");
@@ -223,6 +275,32 @@ public class Game {
 			e.printStackTrace();
 		}
 
+	}
+
+	public void printStats() {
+		System.out.println("Dealer's lifetime stats:");
+		System.out.println("number of times dealer got blackjack: " + this.dealer.blackJackNumber);
+		System.out.println("number of times dealer won: " + this.dealer.wins);
+		System.out.println("number of times dealer lost: " + this.dealer.loses);
+		System.out.println();
+		System.out.println("number of times player got blackjack: " + this.player.blackJackNumber);
+		System.out.println("number of times player won: " + this.player.wins);
+		System.out.println("number of times player lost: " + this.player.loses);
+		System.out.println("number of times player tied: " + this.player.numberTies);
+
+	}
+	
+	public void readDataIn() {
+		if(testing == false) {
+			try {
+				this.player.readStats();
+				this.dealer.readStats();
+				this.player.setStats();
+				this.dealer.setStats();
+			} catch (Exception e) {
+
+			}
+		}
 	}
 }
 

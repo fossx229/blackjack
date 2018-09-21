@@ -12,11 +12,19 @@ public class Dealer {
 	private int numberOfDecks;
 	private static Deck dealersDeck;
 	ArrayList<String> stats = new ArrayList<String>();
+	
+	/**
+	 * Deck constructor
+	 */
 	public Dealer() {
 		this.dealersDeck = new Deck();
 		this.dealersDeck.shuffle();
 	}
 
+	/**
+	 * @param player
+	 * Deals cards to a player
+	 */
 	public void dealCards(Player player) {
 
 		for(int j=0; j<2; j++) {
@@ -27,10 +35,16 @@ public class Dealer {
 		this.dealersHand.addToHand(dealCard());
 	}
 
+	/**
+	 * Deals a card
+	 */
 	public Card dealCard() {
 		return dealersDeck.playCard();
 	}
 	
+	/**
+	 * Getter for a hand
+	 */
 	public Hand getHand() {
 		return this.dealersHand;
 	}
@@ -56,6 +70,9 @@ public class Dealer {
 		return this.dealersDeck;
 	}
 	
+	/**
+	 * reads a text file for a dealer's lifetime stats
+	 */
 	public void readStats() {
 		try {
 			BufferedReader in = new BufferedReader(new FileReader("blackjack.txt"));
@@ -69,6 +86,9 @@ public class Dealer {
 		}
 	}
 	
+	/**
+	 * sets stats for a dealer
+	 */
 	public void setStats() {
 		this.wins = Integer.parseInt(stats.get(4).substring(stats.get(4).length()-1, stats.get(4).length()));
 		this.loses = Integer.parseInt(stats.get(5).substring(stats.get(5).length()-1, stats.get(5).length()));
