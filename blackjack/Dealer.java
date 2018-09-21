@@ -12,7 +12,7 @@ public class Dealer {
 	private int numberOfDecks;
 	private static Deck dealersDeck;
 	ArrayList<String> stats = new ArrayList<String>();
-	
+
 	/**
 	 * Deck constructor
 	 */
@@ -30,7 +30,7 @@ public class Dealer {
 		for(int j=0; j<2; j++) {
 			player.getHand().addToHand(dealCard());
 		}
-		
+
 		this.dealersHand.addToHand(dealCard());
 		this.dealersHand.addToHand(dealCard());
 	}
@@ -41,7 +41,7 @@ public class Dealer {
 	public Card dealCard() {
 		return dealersDeck.playCard();
 	}
-	
+
 	/**
 	 * Getter for a hand
 	 */
@@ -52,24 +52,24 @@ public class Dealer {
 	public void updateLoses() {
 		this.loses = loses +1;
 	}
-	
+
 	public void updateWins() {
 		this.wins = wins +1;
 	}
-	
+
 	public void updateBlackJackNumber() {
 		this.blackJackNumber = this.blackJackNumber + 1;
 	}
-	
+
 	public void remakeDeck() {
 		this.dealersDeck = new Deck();
 		this.dealersDeck.shuffle();
 	}
-	
+
 	public Deck getDeck() {
 		return this.dealersDeck;
 	}
-	
+
 	/**
 	 * reads a text file for a dealer's lifetime stats
 	 */
@@ -85,14 +85,18 @@ public class Dealer {
 			System.out.println("Something went wrong when trying to read a file.");
 		}
 	}
-	
+
 	/**
 	 * sets stats for a dealer
 	 */
 	public void setStats() {
-		this.wins = Integer.parseInt(stats.get(4).substring(stats.get(4).length()-1, stats.get(4).length()));
-		this.loses = Integer.parseInt(stats.get(5).substring(stats.get(5).length()-1, stats.get(5).length()));
-		this.blackJackNumber = Integer.parseInt(stats.get(6).substring(stats.get(6).length()-1, stats.get(6).length()));
-		
+
+		for(int i = 0; i < stats.size(); i++) {
+			stats.set(i, stats.get(i).replaceAll("[^-?0-9]+", ""));
+		}
+
+		this.wins = Integer.parseInt(stats.get(4));
+		this.loses = Integer.parseInt(stats.get(5));
+		this.blackJackNumber = Integer.parseInt(stats.get(6));
 	}
 }

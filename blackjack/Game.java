@@ -283,6 +283,7 @@ public class Game {
 		System.out.println("number of times dealer won: " + this.dealer.wins);
 		System.out.println("number of times dealer lost: " + this.dealer.loses);
 		System.out.println();
+		System.out.println("Player's lifetime stats:");
 		System.out.println("number of times player got blackjack: " + this.player.blackJackNumber);
 		System.out.println("number of times player won: " + this.player.wins);
 		System.out.println("number of times player lost: " + this.player.loses);

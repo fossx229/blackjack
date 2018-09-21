@@ -23,6 +23,7 @@ public class Player {
 	 * 
 	 */
 	public Player(int bank, String name) {
+		
 		this.bank = bank;
 		this.name = name;
 		this.playersHand = new Hand();
@@ -133,10 +134,15 @@ public class Player {
 	 * 
 	 */
 	public void setStats() {
-		this.wins = Integer.parseInt(stats.get(0).substring(stats.get(0).length()-1, stats.get(0).length()));
-		this.loses = Integer.parseInt(stats.get(1).substring(stats.get(1).length()-1, stats.get(1).length()));
-		this.blackJackNumber = Integer.parseInt(stats.get(2).substring(stats.get(2).length()-1, stats.get(2).length()));
-		this.numberTies = Integer.parseInt(stats.get(3).substring(stats.get(3).length()-1, stats.get(3).length()));
+		
+		for(int i = 0; i < stats.size(); i++) {
+			stats.set(i, stats.get(i).replaceAll("[^-?0-9]+", ""));
+		}
+		System.out.println(stats.get(0));
+		this.wins = Integer.parseInt(stats.get(0));
+		this.loses = Integer.parseInt(stats.get(1));
+		this.blackJackNumber = Integer.parseInt(stats.get(2));
+		this.numberTies = Integer.parseInt(stats.get(3));
 	}
 }
 

@@ -77,17 +77,7 @@ public class UnitTests {
 		newGame.dealerHitOrNot();
 		assertTrue(newGame.dealer.loses == 1);
 	}
-	
-	@Test
-	public void testDealerHitOrNot() {
-		
-		newGame.dealer.getHand().addToHand(new Card("Spades", "Ace", 1));
-		newGame.dealer.getHand().addToHand(new Card("Clubs", "Ace", 1));
-		newGame.dealer.getHand().addToHand(new Card("Spades", "Five", 5));
-		newGame.dealerHitOrNot();
-		assertTrue(newGame.dealer.getHand().getCount() == 17);
-	}
-	
+
 	@Test
 	public void resolveGame() {
 		
@@ -136,7 +126,7 @@ public class UnitTests {
 		newGame.player.numberTies = 1;
 		
 		newGame.dealer.wins = 1;
-		newGame.dealer.loses = 1;
+		newGame.dealer.loses = 12;
 		newGame.dealer.blackJackNumber = 1;
 
 		newGame.writeData();
@@ -148,8 +138,7 @@ public class UnitTests {
 		newGame.player.setStats();
 		newGame.dealer.setStats();
 	
-		assertTrue(newGame.player.wins == 1 && newGame.dealer.loses == 1);
-		assertTrue(newGame.player.loses == 1 && newGame.dealer.wins == 1);
+		assertTrue(newGame.player.wins == 1 && newGame.dealer.loses == 12);
 		assertTrue(newGame.player.blackJackNumber == 1 && newGame.dealer.blackJackNumber == 1);
 		assertTrue(newGame.player.numberTies == 1);
 		
