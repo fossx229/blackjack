@@ -5,11 +5,12 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
-* This class represents a deck
-* 
-*/
+ * This class represents a deck
+ * 
+ */
 public class Deck implements Iterable<Card> {
-
+	final static private String[] values = {"2","3","4","5","6","7","8","9","10","J","Q","K","A"};
+	final static private String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
 	private ArrayList<Card> cards = new ArrayList<Card>();
 
 	/**
@@ -17,9 +18,24 @@ public class Deck implements Iterable<Card> {
 	 * 
 	 * @param cards
 	 */
-	public Deck(ArrayList<Card> cards) {
-		for (Card c : cards) {
-			this.cards.add(c);
+	public Deck() {
+		for(int z = 0; z < 1; z++) {
+			for (int i = 0; i < suits.length; i++) {
+				for (int j = 0;  j < values.length-4; j++) {
+					this.cards.add(new Card(suits[i], values[j], Integer.parseInt((values[j]))));
+				}
+			}
+			for (int i = 0; i < suits.length; i++) {
+				for (int j =  values.length-3; j <  values.length-1; j++) {
+					this.cards.add(new Card(suits[i], values[j], 10));
+				}
+			}
+			
+			for (int i = 0; i < suits.length; i++) {
+				for (int j = values.length-1; j < values.length; j++) {
+					this.cards.add(new Card(suits[i], values[j], 1));
+				}
+			}
 		}
 	}
 
@@ -46,6 +62,10 @@ public class Deck implements Iterable<Card> {
 	 * @return deck
 	 */
 	public Card playCard() {
+		if(cards.size() == 0) {
+			System.out.println("You can't play a card from an empty deck");
+			System.exit(0);
+		}
 		return cards.remove(cards.size() - 1);
 	}
 

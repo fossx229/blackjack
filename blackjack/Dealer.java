@@ -1,47 +1,78 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Dealer {
-	private int wins;
-	private int loses;
-	private int blackJackNumber;
+	int wins;
+	int loses;
+	int blackJackNumber;
 	private int count;
-	private ArrayList<Card> dealersHand = new ArrayList<Card>();
+	private Hand dealersHand = new Hand();
 	private int numberOfDecks;
 	private static Deck dealersDeck;
-
-	public Dealer(int numberOfDecks) {
-		this.dealersDeck = new Deck(numberOfDecks);
+	ArrayList<String> stats = new ArrayList<String>();
+	public Dealer() {
+		this.dealersDeck = new Deck();
+		this.dealersDeck.shuffle();
 	}
 
-	public void dealCards(ArrayList<Player> players) {
-		for(int i=0; i<players.size(); i++) {
-			for(int j=0; j<2; j++) {
-			 players.get(i).addCard(dealersDeck.playCard());
-			}
+	public void dealCards(Player player) {
+
+		for(int j=0; j<2; j++) {
+			player.getHand().addToHand(dealCard());
 		}
-		addCard(dealersDeck.playCard());
-		addCard(dealersDeck.playCard());
+		
+		this.dealersHand.addToHand(dealCard());
+		this.dealersHand.addToHand(dealCard());
 	}
-	
+
 	public Card dealCard() {
 		return dealersDeck.playCard();
 	}
 	
-	public void addCard(Card card) {
-		setCount(card);
-		this.dealersHand.add(card);
+	public Hand getHand() {
+		return this.dealersHand;
+	}
+
+	public void updateLoses() {
+		this.loses = loses +1;
 	}
 	
-	public void setCount(Card card) {
-		this.count =  this.count + card.getNumericValue();	
+	public void updateWins() {
+		this.wins = wins +1;
 	}
 	
-	public int getCount() {
-		return this.count;
+	public void updateBlackJackNumber() {
+		this.blackJackNumber = this.blackJackNumber + 1;
 	}
 	
-	public void hit(Card card) {
-		setCount(card);
-		this.dealersHand.add(card);
+	public void remakeDeck() {
+		this.dealersDeck = new Deck();
+		this.dealersDeck.shuffle();
+	}
+	
+	public Deck getDeck() {
+		return this.dealersDeck;
+	}
+	
+	public void readStats() {
+		try {
+			BufferedReader in = new BufferedReader(new FileReader("blackjack.txt"));
+			while (in.read()!= -1) {
+				stats.add(in.readLine());
+			}
+			in.close();
+		} 
+		catch (IOException e) {
+			System.out.println("Something went wrong when trying to read a file.");
+		}
+	}
+	
+	public void setStats() {
+		this.wins = Integer.parseInt(stats.get(4).substring(stats.get(4).length()-1, stats.get(4).length()));
+		this.loses = Integer.parseInt(stats.get(5).substring(stats.get(5).length()-1, stats.get(5).length()));
+		this.blackJackNumber = Integer.parseInt(stats.get(6).substring(stats.get(6).length()-1, stats.get(6).length()));
+		
 	}
 }
